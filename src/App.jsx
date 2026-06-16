@@ -1,11 +1,11 @@
+import { RouterProvider } from "react-router";
 import "./App.css";
-import Dashboard from "./pages/Dashboard";
+import { router } from "./router/router";
 
 function App() {
   return (
     <>
-    
-      <Dashboard/>
+     <RouterProvider router={router} />
     </>
   );
 }

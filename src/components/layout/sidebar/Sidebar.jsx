@@ -10,22 +10,23 @@ const sidebarButtons = [
   {
     title: "Dashboard",
     icon: <BsHouseDoor size={20} />,
-    path: "/dashboard",
+    path: "/app",
+    end:'end',
   },
   {
     title: "Expenses",
     icon: <LuCalendarFold size={20} />,
-    path: "/expenses",
+    path: "/app/expenses",
   },
   {
     title: "Analytics",
     icon: <VscGraph size={20} />,
-    path: "/analytics",
+    path: "/app/analytics",
   },
   {
     title: "Settings",
     icon: <IoSettingsOutline size={20} />,
-    path: "/settings",
+    path: "/app/settings",
   },
 ];
 
@@ -50,6 +51,7 @@ const Sidebar = () => {
               title={button.title}
               icon={button.icon}
               path={button.path}
+              end={button.end}
             />
           ))}
 
