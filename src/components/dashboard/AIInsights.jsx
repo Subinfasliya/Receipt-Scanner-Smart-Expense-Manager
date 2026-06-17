@@ -8,6 +8,9 @@ import { RiInformationLine } from "react-icons/ri";
 import { Link } from "react-router";
 
 const AIInsights = () => {
+
+  console.log("AI insights component rendered...");
+  
   return (
     <>
       <div className="flex justify-between items-center">

@@ -7,7 +7,8 @@ import { RiPieChart2Line } from "react-icons/ri";
 import { TfiReceipt } from "react-icons/tfi";
 import Sidebar from "../components/layout/sidebar/Sidebar";
 import AIInsights from "../components/dashboard/AIInsights";
-
+import { useReceiptScanner } from "../hooks/useReceiptScanner";
+import { useNavigate } from "react-router";
 
 const summaryCards = [
   {
@@ -17,7 +18,6 @@ const summaryCards = [
     description: "↑ 18.5% vs last month",
     iconBg: "bg-[#EDE9FE]",
     iconColor: "text-[#7C3AED]",
-
   },
   {
     icon: <LuCalendarDays size={30} />,
@@ -46,6 +46,24 @@ const summaryCards = [
 ];
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+
+  const { loading, ocrText, processReceipt } = useReceiptScanner();
+
+  console.log(ocrText);
+  
+
+  const handleScanReceipt = () => {
+    console.log("Scan Receipt");
+  };
+
+  const handleUploadReceipt = () => {
+    console.log("Upload Receipt");
+  };
+
+  const handleManualExpense = () => {
+    navigate("/app/review-receipt");
+  };
   return (
     <>
       {/* Dashboard Content */}
@@ -59,7 +77,7 @@ const Dashboard = () => {
 
       <div className="grid grid-cols-12 gap-6">
         {/* Left Section */}
-        <div className="col-span-12 xl:col-span-7 space-y-6">
+        <div className="col-span-12 xl:col-span-8 space-y-6">
           {/* Scan and Upload  */}
           <section>
             <div className="bg-white rounded-2xl shadow-sm p-6">
@@ -67,7 +85,13 @@ const Dashboard = () => {
               <p className="mb-5">Extract and save your expenses in seconds</p>
 
               <div className="flex justify-between">
-                <ReceiptActions />
+                <ReceiptActions
+                  onScanReceipt={handleScanReceipt}
+                  onUploadReceipt={handleUploadReceipt}
+                  onManualExpense={handleManualExpense}
+                />
+
+                {loading && <p>Scanning receipt...</p>}
               </div>
             </div>
           </section>
@@ -87,7 +111,7 @@ const Dashboard = () => {
         </div>
 
         {/* Right Section */}
-        <div className="col-span-12 xl:col-span-5 space-y-6">
+        <div className="col-span-12 xl:col-span-4 space-y-6">
           {/* AI Insights */}
           <div className="bg-white rounded-2xl p-6 shadow-sm">
             <AIInsights />
