@@ -1,14 +1,16 @@
-import { CiCamera } from "react-icons/ci";
 import ExpenseCard from "../components/dashboard/ExpenseCard";
 import ReceiptActions from "../components/dashboard/ReceiptActions";
-import ExpenseTrendChart from "../components/dashboard/ExpenseTrendChart";
 import { LuCalendarDays, LuWallet } from "react-icons/lu";
 import { RiPieChart2Line } from "react-icons/ri";
 import { TfiReceipt } from "react-icons/tfi";
-import Sidebar from "../components/layout/sidebar/Sidebar";
 import AIInsights from "../components/dashboard/AIInsights";
 import { useReceiptScanner } from "../hooks/useReceiptScanner";
 import { useNavigate } from "react-router";
+import { lazy, Suspense } from "react";
+
+const ExpenseTrendChart = lazy(() => 
+  import("../components/dashboard/ExpenseTrendChart")
+)
 
 const summaryCards = [
   {
@@ -51,7 +53,6 @@ const Dashboard = () => {
   const { loading, ocrText, processReceipt } = useReceiptScanner();
 
   console.log(ocrText);
-  
 
   const handleScanReceipt = () => {
     console.log("Scan Receipt");
@@ -100,7 +101,9 @@ const Dashboard = () => {
           <section>
             <div className="bg-white rounded-2xl p-6 shadow-sm ">
               {/* Expense Trend Chart */}
-              <ExpenseTrendChart />
+              <Suspense fallback={<p>Loading chart...</p>}>
+                <ExpenseTrendChart />
+              </Suspense>
             </div>
           </section>
 
