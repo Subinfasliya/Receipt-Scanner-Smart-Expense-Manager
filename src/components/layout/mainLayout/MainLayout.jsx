@@ -1,6 +1,7 @@
 import { Outlet } from "react-router";
-import Header from "./header/Header";
-import Sidebar from "./sidebar/Sidebar";
+import Sidebar from "./Sidebar";
+import Header from "./Header";
+
 
 const MainLayout = () => {
   return (

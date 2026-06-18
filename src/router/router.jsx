@@ -1,15 +1,18 @@
 import { createBrowserRouter } from "react-router";
-import MainLayout from "../components/layout/MainLayout";
+
 import Dashboard from "../pages/Dashboard";
 import Expenses from "../pages/Expenses";
-import LoginPage from "../pages/LoginPage";
-import RegisterPage from "../pages/RegisterPage";
+import LoginPage from "../pages/authPages/LoginPage";
+import RegisterPage from "../pages/authPages/RegisterPage";
 import ErrorPage from "../pages/ErrorPage";
 import ReviewReceipt from "../pages/ReviewReceipt";
+import MainLayout from "../components/layout/mainLayout/MainLayout";
+import AuthLayout from "../components/layout/authLayout/AuthLayout";
 
 export const router = createBrowserRouter([
   {
     path: "/",
+    Component: AuthLayout,
     errorElement:<ErrorPage/>,
     children: [
       { index: true, Component: LoginPage },
