@@ -8,25 +8,55 @@ import ErrorPage from "../pages/ErrorPage";
 import ReviewReceipt from "../pages/ReviewReceipt";
 import MainLayout from "../components/layout/mainLayout/MainLayout";
 import AuthLayout from "../components/layout/authLayout/AuthLayout";
+import ProtectedRoute from "../routes/ProtectedRoute";
+import PublicRoute from "../routes/PublicRoute";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    Component: AuthLayout,
-    errorElement:<ErrorPage/>,
+    Component: PublicRoute,
     children: [
-      { index: true, Component: LoginPage },
-      { path: "register", Component: RegisterPage },
+      {
+        Component: AuthLayout,
+        errorElement: <ErrorPage />,
+        children: [
+          { index: true, Component: LoginPage },
+          { path: "register", Component: RegisterPage },
+        ],
+      },
     ],
   },
   {
     path: "/app",
-    Component: MainLayout,
-    errorElement:<ErrorPage/>,
+    Component: ProtectedRoute,
     children: [
-      { index: true, Component: Dashboard, handle:{title:"Dashboard",subtitle:"Welcome Back"} },
-      {path:"review-receipt", Component: ReviewReceipt, handle:{title:"Review Receipt",subtitle:"Verify and edit extracted data"}},
-      { path: "expenses", Component: Expenses, handle:{title:"Expenses",subtitle:"Manage and track all your expenses"} },
+      {
+        Component: MainLayout,
+        errorElement: <ErrorPage />,
+        children: [
+          {
+            index: true,
+            Component: Dashboard,
+            handle: { title: "Dashboard", subtitle: "Welcome Back" },
+          },
+          {
+            path: "review-receipt",
+            Component: ReviewReceipt,
+            handle: {
+              title: "Review Receipt",
+              subtitle: "Verify and edit extracted data",
+            },
+          },
+          {
+            path: "expenses",
+            Component: Expenses,
+            handle: {
+              title: "Expenses",
+              subtitle: "Manage and track all your expenses",
+            },
+          },
+        ],
+      },
     ],
   },
 ]);

@@ -4,9 +4,50 @@ import {
   MdOutlineRemoveRedEye,
 } from "react-icons/md";
 import { TfiReceipt } from "react-icons/tfi";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import googleLogo from "../../assets/images/google-color.svg";
+import { useFormik } from "formik";
+import { loginSchema } from "../../validation/authValidation";
+import { toast } from "react-toastify";
+import { useAuth } from "../../context/AuthContext";
 
 const LoginPage = () => {
+  const navigate = useNavigate();
+  const { login } = useAuth();
+
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+
+    validationSchema: loginSchema,
+
+    onSubmit: (values) => {
+      const users = JSON.parse(localStorage.getItem("users")) || [];
+
+      const user = users.find(
+        (user) =>
+          user.email === values.email && user.password === values.password,
+      );
+
+      if (!user) {
+        toast.error("Invalid crendentials");
+        return;
+      }
+
+
+      login({
+        name: user.name,
+        email: user.email,
+      });
+
+      toast.success("Login successful")
+
+      navigate("/app");
+    },
+  });
+
   return (
     <>
       {/* Logo */}
@@ -21,49 +62,89 @@ const LoginPage = () => {
         Sign in to manage your expenses
       </p>
 
-      {/* Email */}
-      <div className="relative mb-5">
-        <MdOutlineEmail
-          size={24}
-          className="absolute left-4 top-1/2 -translate-y-1/2 text-[#7C3AED]"
-        />
+      <form onSubmit={formik.handleSubmit}>
+        {/* Email */}
+        <div className="mb-5">
+          <div className="relative">
+            <MdOutlineEmail
+              size={24}
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-[#7C3AED]"
+            />
 
-        <input
-          type="email"
-          placeholder="Email address"
-          className="w-full border rounded-lg py-4 pl-12 pr-4 outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div>
+            <input
+              type="email"
+              name="email"
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              placeholder="Email address"
+              className={`w-full rounded-lg py-4 pl-12 pr-12 outline-none shadow-sm border
+                ${
+                  formik.touched.email && formik.errors.email
+                    ? "border-red-500 focus:ring-2 focus:ring-red-500"
+                    : "border-gray-300 focus:ring-2 focus:ring-[#7C3AED]"
+                }`}
+            />
+          </div>
 
-      {/* Password */}
-      <div className="relative mb-3">
-        <MdOutlineLock
-          size={24}
-          className="absolute left-4 top-1/2 -translate-y-1/2 text-[#7C3AED]"
-        />
+          {formik.touched.email && formik.errors.email && (
+            <p className="text-red-500 font-semibold text-sm mt-1 ml-1">
+              {formik.errors.email}
+            </p>
+          )}
+        </div>
 
-        <input
-          type="password"
-          placeholder="Password"
-          className="w-full border rounded-lg py-4 pl-12 pr-12 outline-none focus:ring-2 focus:ring-blue-500"
-        />
+        {/* Password */}
+        <div className="mb-3">
+          <div className="relative">
+            <MdOutlineLock
+              size={24}
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-[#7C3AED]"
+            />
 
-        <MdOutlineRemoveRedEye
-          size={24}
-          className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer"
-        />
-      </div>
+            <input
+              type="password"
+              name="password"
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              placeholder="Password"
+              className={`w-full rounded-lg py-4 pl-12 pr-12 outline-none shadow-sm border
+                ${
+                  formik.touched.password && formik.errors.password
+                    ? "border-red-500 focus:ring-2 focus:ring-red-500"
+                    : "border-gray-300 focus:ring-2 focus:ring-[#7C3AED]"
+                }`}
+            />
 
-      <div className="text-right mb-8">
-        <button className="text-sm text-[#7C3AED] font-semibold hover:underline">
-          Forgot Password?
+            <MdOutlineRemoveRedEye
+              size={24}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer"
+            />
+          </div>
+
+          {formik.touched.password && formik.errors.password && (
+            <p className="text-red-500 text-sm mt-1 ml-1 font-semibold">
+              {formik.errors.password}
+            </p>
+          )}
+        </div>
+
+        <div className="text-right mb-8">
+          <button
+            type="button"
+            className="text-sm text-[#7C3AED] font-semibold hover:underline"
+          >
+            Forgot Password?
+          </button>
+        </div>
+
+        {/* Sign In Button */}
+        <button
+          type="submit"
+          className="w-full py-4 border rounded-lg font-semibold text-lg bg-[#7C3AED] text-white cursor-pointer hover:bg-[#5e2db3]  transition"
+        >
+          Sign In
         </button>
-      </div>
-
-      {/* Sign In Button */}
-      <button className="w-full py-4 border rounded-lg font-semibold text-lg bg-[#7C3AED] text-white cursor-pointer hover:bg-[#5e2db3]  transition">
-        Sign In
-      </button>
+      </form>
 
       {/* Divider */}
       <div className="flex items-center gap-4 my-8">
@@ -74,20 +155,18 @@ const LoginPage = () => {
 
       {/* Google Button */}
       <button className="w-full border rounded-lg py-4 flex items-center justify-center gap-3 hover:bg-gray-50 transition">
-        <img
-          src="https://www.svgrepo.com/show/475656/google-color.svg"
-          alt="Google"
-          className="w-6 h-6"
-        />
+        <img src={googleLogo} alt="Google" className="w-6 h-6" />
 
         <span className="font-medium">Continue with Google</span>
       </button>
 
       <p className="text-center mt-8 text-gray-600">
         Don't have an account?{" "}
-        <button className="font-semibold text-[#7C3AED] hover:underline">
-          Sign Up
-        </button>
+        <Link to={"/register"}>
+          <button className="font-semibold text-[#7C3AED] hover:underline cursor-pointer">
+            Sign Up
+          </button>
+        </Link>
       </p>
     </>
   );
