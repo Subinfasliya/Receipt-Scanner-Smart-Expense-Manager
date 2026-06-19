@@ -10,6 +10,7 @@ import MainLayout from "../components/layout/mainLayout/MainLayout";
 import AuthLayout from "../components/layout/authLayout/AuthLayout";
 import ProtectedRoute from "../routes/ProtectedRoute";
 import PublicRoute from "../routes/PublicRoute";
+import ScanPage from "../pages/ScanPage";
 
 export const router = createBrowserRouter([
   {
@@ -55,6 +56,7 @@ export const router = createBrowserRouter([
               subtitle: "Manage and track all your expenses",
             },
           },
+
         ],
       },
     ],
