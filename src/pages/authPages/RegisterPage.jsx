@@ -5,8 +5,51 @@ import {
   MdOutlineRemoveRedEye,
 } from "react-icons/md";
 import { TfiReceipt } from "react-icons/tfi";
+import { Link, useNavigate } from "react-router";
+import googleLogo from "../../assets/images/google-color.svg";
+import { useState } from "react";
+import { ErrorMessage, useFormik } from "formik";
+import { registerSchema } from "../../validation/authValidation";
+import { toast } from "react-toastify";
 
 const RegisterPage = () => {
+  const navigate = useNavigate();
+
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+
+    validationSchema: registerSchema,
+
+    onSubmit: (values) => {
+      const users = JSON.parse(localStorage.getItem("users")) || [];
+
+      const userExists = users.find((user) => user.email === values.email);
+
+      if (userExists) {
+        toast.error("Email already exists");
+        return;
+      }
+
+      const newUser = {
+        name: values.name,
+        email: values.email,
+        password: values.password,
+      };
+
+      users.push(newUser);
+
+      localStorage.setItem("users", JSON.stringify(users));
+
+      toast.success("Successfully registered!");
+      navigate("/");
+    },
+  });
+
   return (
     <>
       {/* Logo */}
@@ -23,75 +66,144 @@ const RegisterPage = () => {
         Sign up to start managing your expenses
       </p>
 
-      {/* Full Name */}
-      <div className="relative mb-5">
-        <IoPersonOutline
-          size={24}
-          className="absolute left-4 top-1/2 -translate-y-1/2 text-[#7C3AED]"
-        />
+      <form onSubmit={formik.handleSubmit}>
+        {/* Full Name */}
+        <div className="mb-5">
+          <div className="relative">
+            <IoPersonOutline
+              size={24}
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-[#7C3AED]"
+            />
 
-        <input
-          type="text"
-          placeholder="Full Name"
-          className="w-full border rounded-lg py-4 pl-12 pr-4 outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div>
-      {/* Email */}
-      <div className="relative mb-5">
-        <MdOutlineEmail
-          size={24}
-          className="absolute left-4 top-1/2 -translate-y-1/2 text-[#7C3AED]"
-        />
+            <input
+              type="text"
+              name="name"
+              placeholder="Full Name"
+              value={formik.values.name}
+              onChange={formik.handleChange}
+              className={`w-full rounded-lg py-4 pl-12 pr-12 outline-none shadow-sm border
+                ${
+                  formik.touched.name && formik.errors.name
+                    ? "border-red-500 focus:ring-2 focus:ring-red-500"
+                    : "border-gray-300 focus:ring-2 focus:ring-[#7C3AED]"
+                }`}
+            />
+          </div>
+          {formik.touched.name && formik.errors.name && (
+            <p className="text-red-500 font-semibold text-sm mt-1 ml-1">
+              {formik.errors.name}
+            </p>
+          )}
+        </div>
 
-        <input
-          type="email"
-          placeholder="Email address"
-          className="w-full border rounded-lg py-4 pl-12 pr-4 outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div>
+        {/* Email */}
+        <div className="mb-5">
+          <div className="relative">
+            <MdOutlineEmail
+              size={24}
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-[#7C3AED]"
+            />
 
-      {/* Password */}
-      <div className="relative mb-5">
-        <MdOutlineLock
-          size={24}
-          className="absolute left-4 top-1/2 -translate-y-1/2 text-[#7C3AED]"
-        />
+            <input
+              type="email"
+              name="email"
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              placeholder="Email address"
+              className={`w-full rounded-lg py-4 pl-12 pr-12 outline-none shadow-sm border
+                ${
+                  formik.touched.email && formik.errors.email
+                    ? "border-red-500 focus:ring-2 focus:ring-red-500"
+                    : "border-gray-300 focus:ring-2 focus:ring-[#7C3AED]"
+                }`}
+            />
+          </div>
 
-        <input
-          type="password"
-          placeholder="Password"
-          className="w-full border rounded-lg py-4 pl-12 pr-12 outline-none focus:ring-2 focus:ring-blue-500"
-        />
+          {formik.touched.email && formik.errors.email && (
+            <p className="text-red-500 font-semibold text-sm mt-1 ml-1">
+              {formik.errors.email}
+            </p>
+          )}
+        </div>
 
-        <MdOutlineRemoveRedEye
-          size={24}
-          className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer"
-        />
-      </div>
+        {/* Password */}
+        <div className="mb-5">
+          <div className="relative">
+            <MdOutlineLock
+              size={24}
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-[#7C3AED]"
+            />
 
-      {/* Confirm Password */}
-      <div className="relative mb-5">
-        <MdOutlineLock
-          size={24}
-          className="absolute left-4 top-1/2 -translate-y-1/2 text-[#7C3AED]"
-        />
+            <input
+              type="password"
+              name="password"
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              placeholder="Password"
+              className={`w-full rounded-lg py-4 pl-12 pr-12 outline-none shadow-sm border
+                ${
+                  formik.touched.password && formik.errors.password
+                    ? "border-red-500 focus:ring-2 focus:ring-red-500"
+                    : "border-gray-300 focus:ring-2 focus:ring-[#7C3AED]"
+                }`}
+            />
 
-        <input
-          type="password"
-          placeholder="Confirm Password"
-          className="w-full border rounded-lg py-4 pl-12 pr-12 outline-none focus:ring-2 focus:ring-blue-500"
-        />
+            <MdOutlineRemoveRedEye
+              size={24}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer"
+            />
+          </div>
 
-        <MdOutlineRemoveRedEye
-          size={24}
-          className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer"
-        />
-      </div>
+          {formik.touched.password && formik.errors.password && (
+            <p className="text-red-500 text-sm mt-1 ml-1 font-semibold">
+              {formik.errors.password}
+            </p>
+          )}
+        </div>
 
-      {/* Sign In Button */}
-      <button className="w-full py-4 border rounded-lg font-semibold text-lg bg-[#7C3AED] text-white cursor-pointer hover:bg-[#5e2db3]  transition">
-        Create Account
-      </button>
+        {/* Confirm Password */}
+        <div className="mb-5">
+          <div className="relative">
+            <MdOutlineLock
+              size={24}
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-[#7C3AED]"
+            />
+
+            <input
+              type="password"
+              name="confirmPassword"
+              value={formik.values.confirmPassword}
+              onChange={formik.handleChange}
+              placeholder="Confirm Password"
+              className={`w-full rounded-lg py-4 pl-12 pr-12 outline-none shadow-sm border
+                ${
+                  formik.touched.password && formik.errors.password
+                    ? "border-red-500 focus:ring-2 focus:ring-red-500"
+                    : "border-gray-300 focus:ring-2 focus:ring-[#7C3AED]"
+                }`}
+            />
+
+            <MdOutlineRemoveRedEye
+              size={24}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer"
+            />
+          </div>
+
+          {formik.touched.confirmPassword && formik.errors.confirmPassword && (
+            <p className="text-red-500 text-sm mt-1 ml-1 font-semibold">
+              {formik.errors.confirmPassword}
+            </p>
+          )}
+        </div>
+
+        {/* Sign In Button */}
+        <button
+          type="submit"
+          className="w-full py-4 border rounded-lg font-semibold text-lg bg-[#7C3AED] text-white cursor-pointer hover:bg-[#5e2db3]  transition"
+        >
+          Create Account
+        </button>
+      </form>
 
       {/* Divider */}
       <div className="flex items-center gap-4 my-8">
@@ -102,22 +214,21 @@ const RegisterPage = () => {
 
       {/* Google Button */}
       <button className="w-full border rounded-lg py-4 flex items-center justify-center gap-3 hover:bg-gray-50 transition">
-        <img
-          src="https://www.svgrepo.com/show/475656/google-color.svg"
-          alt="Google"
-          className="w-6 h-6"
-        />
+        <img src={googleLogo} alt="Google" className="w-6 h-6" />
 
         <span className="font-medium">Continue with Google</span>
       </button>
 
       <p className="text-center mt-8 text-gray-600">
         Already have an account?{" "}
-        <button className="font-semibold text-[#7C3AED] hover:underline">
-         Log In
-        </button>
+        <Link to={"/"}>
+          <button className="font-semibold text-[#7C3AED] hover:underline cursor-pointer">
+            Log In
+          </button>
+        </Link>
       </p>
     </>
   );
 };
+
 export default RegisterPage;

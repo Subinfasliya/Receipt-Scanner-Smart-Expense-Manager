@@ -3,12 +3,15 @@ import { Outlet } from "react-router";
 import receiptIllustration from "../../../assets/images/receipt-illustration.png"
 
 const AuthLayout = () => {
+
+ 
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
       {/* Main Content */}
       <div className="flex flex-1 flex-col lg:flex-row">
         {/* Left Section */}
-        <div className="lg:w-1/2 bg-white border-r flex items-center justify-center p-10">
+        <div className="lg:w-1/2 bg-white  flex items-center justify-center p-10">
           <div className="max-w-lg">
             <h1 className="text-4xl font-bold text-gray-900 mb-6">
               Smart Expense Management <span className="text-[#7C3AED]">Made Simple</span>
@@ -30,7 +33,7 @@ const AuthLayout = () => {
 
         {/* Right Section */}
         <div className="lg:w-1/2 flex items-center justify-center p-6">
-          <div className="w-full max-w-xl bg-white rounded-2xl border shadow-sm p-10">
+          <div className="w-full max-w-xl bg-white rounded-2xl shadow-sm p-10">
 
              <Outlet/>
              
