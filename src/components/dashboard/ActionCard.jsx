@@ -1,10 +1,10 @@
 import { Link } from "react-router";
 
-const ActionCard = ({ icon, title, description, link, bgColor, iconBg }) => {
+const ActionCard = ({ icon, title, description, onClick, bgColor, iconBg }) => {
   return (
     <>
-      <Link
-        to={link}
+      <div
+        onClick={onClick}
         className={`${bgColor} p-5 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer `}
       >
         <div className="flex items-center  gap-3 ">
@@ -14,7 +14,7 @@ const ActionCard = ({ icon, title, description, link, bgColor, iconBg }) => {
             <p className="text-sm opacity-80">{description}</p>
           </div>
         </div>
-      </Link>
+      </div>
     </>
   );
 };

@@ -3,15 +3,15 @@ import { LuCalendarDays, LuPlus, LuWallet } from "react-icons/lu";
 import { RiPieChart2Line, RiUploadCloudLine } from "react-icons/ri";
 import { TfiReceipt } from "react-icons/tfi";
 import AIInsights from "../components/dashboard/AIInsights";
-import { useReceiptScanner } from "../hooks/useReceiptScanner";
+
 import { useNavigate } from "react-router";
 import { lazy, Suspense } from "react";
 import ActionCard from "../components/dashboard/ActionCard";
 import { MdOutlineCameraAlt } from "react-icons/md";
 
-const ExpenseTrendChart = lazy(() => 
-  import("../components/dashboard/ExpenseTrendChart")
-)
+const ExpenseTrendChart = lazy(
+  () => import("../components/dashboard/ExpenseTrendChart"),
+);
 
 // Summary Cards
 const summaryCards = [
@@ -49,7 +49,25 @@ const summaryCards = [
   },
 ];
 
-// 
+//
+
+const Dashboard = () => {
+  const navigate = useNavigate();
+ 
+
+
+    const handleCameraOpen = () => {
+    console.log("Camera is Opend");
+    navigate("/app/camera")
+  };
+    const handleReceiptUpload = () => {
+   navigate("/app/upload-receipt")
+  };
+    const handleManualReceipt = () => {
+    console.log("Manual entry  is Opend");
+  };
+
+  // Action cards
   const actionCards = [
     {
       title: "Scan Receipt",
@@ -57,7 +75,7 @@ const summaryCards = [
       icon: <MdOutlineCameraAlt size={30} />,
       bgColor: "bg-[#EDE9FE]",
       iconBg: "text-[#7C3AED]",
-      link: "/app/scan-receipt",
+      onClick: handleCameraOpen,
     },
     {
       title: "Upload Receipt",
@@ -65,7 +83,7 @@ const summaryCards = [
       icon: <RiUploadCloudLine size={30} />,
       bgColor: "bg-[#DBEAFE]",
       iconBg: "text-[#2563EB]",
-      link: "/app/upload-receipt",
+      onClick: handleReceiptUpload,
     },
     {
       title: "Add Expense",
@@ -73,16 +91,10 @@ const summaryCards = [
       icon: <LuPlus size={30} />,
       bgColor: "bg-[#DCFCE7]",
       iconBg: "text-[#22C55E]",
-      action: "/app/review-receipt",
+      onClick: handleManualReceipt,
     },
   ];
 
-const Dashboard = () => {
-
-  const navigate = useNavigate();
-  const { loading, ocrText, processReceipt } = useReceiptScanner();
-
-  console.log(ocrText);
 
 
   return (
@@ -106,8 +118,8 @@ const Dashboard = () => {
               <p className="mb-5">Extract and save your expenses in seconds</p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {actionCards.map((card)=> (
-                  <ActionCard key={card.title} {...card}/>
+                {actionCards.map((card) => (
+                  <ActionCard key={card.title} {...card} />
                 ))}
               </div>
             </div>
