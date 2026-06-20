@@ -16,11 +16,11 @@ const AIInsights = () => {
       <div className="flex justify-between items-center">
         <div>
           <h2 className="font-bold text-lg">AI Insights</h2>
-          <p className="text-gray-500">
+          <p className="text-gray-500 text-sm">
             AI comparison of this month with last month
           </p>
         </div>
-        <button className="py-1 px-2 text-sm border bg-[#EDE9FE] text-[#7C3AED] cursor-pointer rounded-xl font-semibold">
+        <button className="py-2 px-4 text-sm border bg-[#EDE9FE] text-[#7C3AED] cursor-pointer rounded-xl font-semibold">
           New ✨
         </button>
       </div>
