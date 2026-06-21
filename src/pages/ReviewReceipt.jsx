@@ -174,8 +174,15 @@ import { useState } from "react";
 import { BiPlus, BiTrash } from "react-icons/bi";
 import { SlCalender } from "react-icons/sl";
 import { CiClock2 } from "react-icons/ci";
+import { useLocation } from "react-router";
 
 const ReviewReceipt = () => {
+  const [formData, setFormData] = useState({
+    store: "",
+    date: "",
+    amount: "",
+  });
+
   const [items, setItems] = useState([
     {
       id: 1,
@@ -210,6 +217,12 @@ const ReviewReceipt = () => {
     "Entertainment",
     "Others",
   ];
+
+  const location = useLocation();
+
+  const { mode, image, scannedData } = location.state || {};
+
+  console.log(scannedData.date);
 
   const handleItemChange = (id, field, value) => {
     setItems((prev) =>
@@ -249,8 +262,8 @@ const ReviewReceipt = () => {
             <div className="border rounded-xl p-4">
               <h3 className="font-semibold mb-4">Receipt Preview</h3>
 
-              <div className="flex justify-center">
-                <div className="bg-gray-50 border shadow-sm w-72 p-6 text-sm">
+              <div className="flex justify-center border border-red-500">
+                {/* <div className="bg-gray-50 border border-blue-500 shadow-sm w-72 p-6 text-sm">
                   <h2 className="text-center font-bold">LULU HYPERMARKET</h2>
 
                   <p className="text-center text-xs mt-2">Kochi, Kerala</p>
@@ -282,7 +295,9 @@ const ReviewReceipt = () => {
                     <span>Total</span>
                     <span>₹85</span>
                   </div>
-                </div>
+                </div> */}
+
+                <img src={image} alt="" />
               </div>
 
               <button className="mt-4 border rounded-lg px-4 py-2">
@@ -300,8 +315,12 @@ const ReviewReceipt = () => {
 
                   <div className="relative">
                     <input
-                      type="date"
+                      type="text"
                       className="w-full border rounded-lg p-3"
+                      value={scannedData.date}
+                      onChange={(e) =>
+                        setFormData(...formData, scannedData.date)
+                      }
                     />
 
                     <SlCalender

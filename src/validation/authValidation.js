@@ -1,15 +1,28 @@
 import * as Yup from "yup";
 
-
 // Register Schema
 
 export const registerSchema = Yup.object({
-  name: Yup.string()
+  firstName: Yup.string()
+    .trim()
     .min(3, "Name must be at least 3 characters")
     .max(30, "Name not exceed more than 30 characters")
-    .required("Name is required"),
+    .required("Name is required")
+    .matches(/^[A-Za-z\s]+$/, "First name can contain only letters"),
 
-  email: Yup.string().email("Invalid email").required("Email is required"),
+  lastName: Yup.string()
+    .trim()
+    .min(2, "Name must be at least 3 characters")
+    .max(30, "Name not exceed more than 30 characters")
+    .required("Name is required")
+    .matches(/^[A-Za-z\s]+$/, "Last name can contain only letters"),
+
+  email: Yup.string()
+    .matches(
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+      "Invalid email format",
+    )
+    .required("Email is required"),
 
   password: Yup.string()
     .min(6, "Password must be at least 6 characters")
@@ -19,7 +32,6 @@ export const registerSchema = Yup.object({
     .oneOf([Yup.ref("password")], "Passwords must match")
     .required("Confirm Password is required"),
 });
-
 
 // Login Schema
 

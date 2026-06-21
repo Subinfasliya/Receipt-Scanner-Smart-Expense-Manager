@@ -43,9 +43,9 @@ const UploadReceipt = () => {
 
   return (
     <div className="p-6 bg-white rounded-xl max-w-xl mx-auto space-y-4">
-      <h2 className="text-xl font-bold">Upload Receipt</h2>
+      <h2 className="text-xl font-bold">Scan or Upload Receipt</h2>
 
-      <input type="file" accept="image/*" onChange={handleFileChange} />
+      <input type="file" accept="image/*" capture="environment" onChange={handleFileChange} className="border w-full p-2 rounded-xl" />
 
       {preview && <img src={preview} className="w-full border rounded" />}
 
