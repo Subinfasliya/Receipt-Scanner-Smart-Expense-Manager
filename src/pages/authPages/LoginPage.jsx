@@ -1,19 +1,21 @@
 import {
   MdOutlineEmail,
   MdOutlineLock,
-  MdOutlineRemoveRedEye,
 } from "react-icons/md";
 import { TfiReceipt } from "react-icons/tfi";
 import { Link, useNavigate } from "react-router";
-import googleLogo from "../../assets/images/google-color.svg";
 import { useFormik } from "formik";
 import { loginSchema } from "../../validation/authValidation";
 import { toast } from "react-toastify";
 import { useAuth } from "../../context/AuthContext";
+import { useState } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
+
 
   const formik = useFormik({
     initialValues: {
@@ -36,13 +38,12 @@ const LoginPage = () => {
         return;
       }
 
-
       login({
         name: user.name,
         email: user.email,
       });
 
-      toast.success("Login successful")
+      toast.success("Login successful");
 
       navigate("/app");
     },
@@ -64,7 +65,7 @@ const LoginPage = () => {
 
       <form onSubmit={formik.handleSubmit}>
         {/* Email */}
-        <div className="mb-5">
+        <div className="mb-10">
           <div className="relative">
             <MdOutlineEmail
               size={24}
@@ -86,15 +87,17 @@ const LoginPage = () => {
             />
           </div>
 
-          {formik.touched.email && formik.errors.email && (
-            <p className="text-red-500 font-semibold text-sm mt-1 ml-1">
-              {formik.errors.email}
-            </p>
-          )}
+          <div className="absolute">
+            {formik.touched.email && formik.errors.email && (
+              <p className="text-red-500 font-semibold text-sm mt-1 ml-1">
+                {formik.errors.email}
+              </p>
+            )}
+          </div>
         </div>
 
         {/* Password */}
-        <div className="mb-3">
+        <div className="mb-8">
           <div className="relative">
             <MdOutlineLock
               size={24}
@@ -102,7 +105,7 @@ const LoginPage = () => {
             />
 
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               name="password"
               value={formik.values.password}
               onChange={formik.handleChange}
@@ -115,26 +118,30 @@ const LoginPage = () => {
                 }`}
             />
 
-            <MdOutlineRemoveRedEye
-              size={24}
+            <span
               className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer"
-            />
+              onClick={() => setShowPassword((prev) => !prev)}
+            >
+              {showPassword ? <FaEyeSlash size={20}/> : <FaEye size={20}/>}
+            </span>
           </div>
-
-          {formik.touched.password && formik.errors.password && (
-            <p className="text-red-500 text-sm mt-1 ml-1 font-semibold">
-              {formik.errors.password}
-            </p>
-          )}
+          <div className="absolute">
+            {formik.touched.password && formik.errors.password && (
+              <p className="text-red-500 text-sm mt-1 ml-1 font-semibold">
+                {formik.errors.password}
+              </p>
+            )}
+          </div>
         </div>
 
         <div className="text-right mb-8">
-          <button
-            type="button"
+          <Link
+            to={"/forgot-password"}
             className="text-sm text-[#7C3AED] font-semibold hover:underline"
+           
           >
             Forgot Password?
-          </button>
+          </Link>
         </div>
 
         {/* Sign In Button */}
@@ -153,12 +160,6 @@ const LoginPage = () => {
         <div className="flex-1 border-t"></div>
       </div>
 
-      {/* Google Button */}
-      <button className="w-full border rounded-lg py-4 flex items-center justify-center gap-3 hover:bg-gray-50 transition">
-        <img src={googleLogo} alt="Google" className="w-6 h-6" />
-
-        <span className="font-medium">Continue with Google</span>
-      </button>
 
       <p className="text-center mt-8 text-gray-600">
         Don't have an account?{" "}

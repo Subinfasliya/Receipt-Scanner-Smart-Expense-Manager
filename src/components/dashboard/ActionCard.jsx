@@ -5,9 +5,9 @@ const ActionCard = ({ icon, title, description, onClick, bgColor, iconBg }) => {
     <>
       <div
         onClick={onClick}
-        className={`${bgColor} p-5 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer `}
+        className={`${bgColor} p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer `}
       >
-        <div className="flex items-center  gap-3 ">
+        <div className="flex items-center gap-4 ">
           <div className={`${iconBg} border p-2 rounded-2xl`}>{icon}</div>
           <div>
             <h3 className="font-semibold">{title}</h3>

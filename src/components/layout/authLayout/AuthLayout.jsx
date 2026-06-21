@@ -21,7 +21,7 @@ const AuthLayout = () => {
               Scan receipts, track expenses, and get AI insights to save more.
             </p>
 
-            <div className="flex justify-center">
+            <div className="  hidden sm:flex sm:justify-center">
               <img
                 src={receiptIllustration}
                 alt="Expense Tracking"

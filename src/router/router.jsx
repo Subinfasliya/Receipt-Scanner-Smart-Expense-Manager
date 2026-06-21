@@ -12,6 +12,7 @@ import ProtectedRoute from "../routes/ProtectedRoute";
 import PublicRoute from "../routes/PublicRoute";
 import CameraOCR from "../pages/CameraOCR";
 import UploadReceipt from "../pages/UploadReceipt";
+import ForgotPassword from "../pages/authPages/ForgotPassword";
 
 export const router = createBrowserRouter([
   {
@@ -24,6 +25,7 @@ export const router = createBrowserRouter([
         children: [
           { index: true, Component: LoginPage },
           { path: "register", Component: RegisterPage },
+          { path: "forgot-password", Component: ForgotPassword },
         ],
       },
     ],
