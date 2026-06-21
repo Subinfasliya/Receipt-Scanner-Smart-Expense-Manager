@@ -11,13 +11,18 @@ import { useState } from "react";
 import { ErrorMessage, useFormik } from "formik";
 import { registerSchema } from "../../validation/authValidation";
 import { toast } from "react-toastify";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const RegisterPage = () => {
   const navigate = useNavigate();
 
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const formik = useFormik({
     initialValues: {
-      name: "",
+      firstName: "",
+      lastName: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -36,7 +41,8 @@ const RegisterPage = () => {
       }
 
       const newUser = {
-        name: values.name,
+        firstName: values.firstName,
+        lastName: values.lastName,
         email: values.email,
         password: values.password,
       };
@@ -67,8 +73,8 @@ const RegisterPage = () => {
       </p>
 
       <form onSubmit={formik.handleSubmit}>
-        {/* Full Name */}
-        <div className="mb-5">
+        {/* First Name */}
+        <div className="mb-10">
           <div className="relative">
             <IoPersonOutline
               size={24}
@@ -77,27 +83,60 @@ const RegisterPage = () => {
 
             <input
               type="text"
-              name="name"
-              placeholder="Full Name"
-              value={formik.values.name}
+              name="firstName"
+              placeholder="First Name"
+              value={formik.values.firstName}
               onChange={formik.handleChange}
               className={`w-full rounded-lg py-4 pl-12 pr-12 outline-none shadow-sm border
                 ${
-                  formik.touched.name && formik.errors.name
+                  formik.touched.firstName && formik.errors.firstName
                     ? "border-red-500 focus:ring-2 focus:ring-red-500"
                     : "border-gray-300 focus:ring-2 focus:ring-[#7C3AED]"
                 }`}
             />
           </div>
-          {formik.touched.name && formik.errors.name && (
-            <p className="text-red-500 font-semibold text-sm mt-1 ml-1">
-              {formik.errors.name}
-            </p>
-          )}
+          <div className="absolute">
+            {formik.touched.firstName && formik.errors.firstName && (
+              <p className="text-red-500 font-semibold text-sm mt-1 ml-1">
+                {formik.errors.firstName}
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* Last Name */}
+        <div className="mb-10">
+          <div className="relative">
+            <IoPersonOutline
+              size={24}
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-[#7C3AED]"
+            />
+
+            <input
+              type="text"
+              name="lastName"
+              placeholder="Last Name"
+              value={formik.values.lastName}
+              onChange={formik.handleChange}
+              className={`w-full rounded-lg py-4 pl-12 pr-12 outline-none shadow-sm border
+                ${
+                  formik.touched.lastName && formik.errors.lastName
+                    ? "border-red-500 focus:ring-2 focus:ring-red-500"
+                    : "border-gray-300 focus:ring-2 focus:ring-[#7C3AED]"
+                }`}
+            />
+          </div>
+          <div className="absolute">
+            {formik.touched.lastName && formik.errors.lastName && (
+              <p className="text-red-500 font-semibold text-sm mt-1 ml-1">
+                {formik.errors.lastName}
+              </p>
+            )}
+          </div>
         </div>
 
         {/* Email */}
-        <div className="mb-5">
+        <div className="mb-10">
           <div className="relative">
             <MdOutlineEmail
               size={24}
@@ -118,16 +157,17 @@ const RegisterPage = () => {
                 }`}
             />
           </div>
-
-          {formik.touched.email && formik.errors.email && (
-            <p className="text-red-500 font-semibold text-sm mt-1 ml-1">
-              {formik.errors.email}
-            </p>
-          )}
+          <div className="absolute">
+            {formik.touched.email && formik.errors.email && (
+              <p className="text-red-500 font-semibold text-sm mt-1 ml-1">
+                {formik.errors.email}
+              </p>
+            )}
+          </div>
         </div>
 
         {/* Password */}
-        <div className="mb-5">
+        <div className="mb-10">
           <div className="relative">
             <MdOutlineLock
               size={24}
@@ -135,7 +175,7 @@ const RegisterPage = () => {
             />
 
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               name="password"
               value={formik.values.password}
               onChange={formik.handleChange}
@@ -148,21 +188,25 @@ const RegisterPage = () => {
                 }`}
             />
 
-            <MdOutlineRemoveRedEye
+            <span
               size={24}
               className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer"
-            />
+              onClick={() => setShowPassword((prev) => !prev)}
+            >
+              {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+            </span>
           </div>
-
-          {formik.touched.password && formik.errors.password && (
-            <p className="text-red-500 text-sm mt-1 ml-1 font-semibold">
-              {formik.errors.password}
-            </p>
-          )}
+          <div className="absolute">
+            {formik.touched.password && formik.errors.password && (
+              <p className="text-red-500 text-sm mt-1 ml-1 font-semibold">
+                {formik.errors.password}
+              </p>
+            )}
+          </div>
         </div>
 
         {/* Confirm Password */}
-        <div className="mb-5">
+        <div className="mb-10">
           <div className="relative">
             <MdOutlineLock
               size={24}
@@ -170,7 +214,7 @@ const RegisterPage = () => {
             />
 
             <input
-              type="password"
+              type={showConfirmPassword ? "text" : "password"}
               name="confirmPassword"
               value={formik.values.confirmPassword}
               onChange={formik.handleChange}
@@ -183,17 +227,26 @@ const RegisterPage = () => {
                 }`}
             />
 
-            <MdOutlineRemoveRedEye
+            <span
               size={24}
               className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer"
-            />
+             onClick={()=> setShowConfirmPassword(prev => !prev)}
+            >
+              {showConfirmPassword ? (
+                <FaEyeSlash size={20} />
+              ) : (
+                <FaEye size={20} />
+              )}
+            </span>
           </div>
-
-          {formik.touched.confirmPassword && formik.errors.confirmPassword && (
-            <p className="text-red-500 text-sm mt-1 ml-1 font-semibold">
-              {formik.errors.confirmPassword}
-            </p>
-          )}
+          <div className="absolute">
+            {formik.touched.confirmPassword &&
+              formik.errors.confirmPassword && (
+                <p className="text-red-500 text-sm mt-1 ml-1 font-semibold">
+                  {formik.errors.confirmPassword}
+                </p>
+              )}
+          </div>
         </div>
 
         {/* Sign In Button */}
@@ -212,13 +265,7 @@ const RegisterPage = () => {
         <div className="flex-1 border-t"></div>
       </div>
 
-      {/* Google Button */}
-      <button className="w-full border rounded-lg py-4 flex items-center justify-center gap-3 hover:bg-gray-50 transition">
-        <img src={googleLogo} alt="Google" className="w-6 h-6" />
-
-        <span className="font-medium">Continue with Google</span>
-      </button>
-
+   
       <p className="text-center mt-8 text-gray-600">
         Already have an account?{" "}
         <Link to={"/"}>
