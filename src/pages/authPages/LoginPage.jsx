@@ -37,9 +37,11 @@ const LoginPage = () => {
         toast.error("Invalid crendentials");
         return;
       }
+           
 
       login({
-        name: user.name,
+        firstName: user.firstName,
+        lastName: user.lastName,
         email: user.email,
       });
 

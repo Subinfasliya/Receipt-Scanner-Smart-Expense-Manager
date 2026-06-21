@@ -3,11 +3,9 @@ import { LuCalendarDays, LuPlus, LuWallet } from "react-icons/lu";
 import { RiPieChart2Line, RiUploadCloudLine } from "react-icons/ri";
 import { TfiReceipt } from "react-icons/tfi";
 import AIInsights from "../components/dashboard/AIInsights";
-
 import { useNavigate } from "react-router";
 import { lazy, Suspense } from "react";
 import ActionCard from "../components/dashboard/ActionCard";
-import { MdOutlineCameraAlt } from "react-icons/md";
 
 const ExpenseTrendChart = lazy(
   () => import("../components/dashboard/ExpenseTrendChart"),
@@ -53,30 +51,20 @@ const summaryCards = [
 
 const Dashboard = () => {
   const navigate = useNavigate();
- 
 
-
-    const handleCameraOpen = () => {
+  const handleCameraOpen = () => {
     console.log("Camera is Opend");
-    navigate("/app/camera")
+    navigate("/app/camera");
   };
-    const handleReceiptUpload = () => {
-   navigate("/app/upload-receipt")
+  const handleReceiptUpload = () => {
+    navigate("/app/upload-receipt");
   };
-    const handleManualReceipt = () => {
+  const handleManualReceipt = () => {
     console.log("Manual entry  is Opend");
   };
 
   // Action cards
   const actionCards = [
-    // {
-    //   title: "Scan Receipt or Upload Receipt",
-    //   description: "Use camera to scan",
-    //   icon: <MdOutlineCameraAlt size={30} />,
-    //   bgColor: "bg-[#EDE9FE]",
-    //   iconBg: "text-[#7C3AED]",
-    //   onClick: handleCameraOpen,
-    // },
     {
       title: "Scan Receipt or Upload Receipt",
       description: "Use camera to scan or upload from gallery",
@@ -94,8 +82,6 @@ const Dashboard = () => {
       onClick: handleManualReceipt,
     },
   ];
-
-
 
   return (
     <>
