@@ -21,6 +21,7 @@ const RegisterPage = () => {
 
   const formik = useFormik({
     initialValues: {
+      id:"",
       firstName: "",
       lastName: "",
       email: "",
@@ -41,11 +42,15 @@ const RegisterPage = () => {
       }
 
       const newUser = {
+        id:crypto.randomUUID(),
         firstName: values.firstName,
         lastName: values.lastName,
         email: values.email,
         password: values.password,
       };
+
+      console.log(newUser);
+      
 
       users.push(newUser);
 
