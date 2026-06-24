@@ -3,8 +3,15 @@ import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import { scanReceipt } from "../services/ocrService";
 import { parseReceipt } from "../services/parserService";
+import { useReceiptStore } from "../store/receiptStore";
+import { useFormStore } from "../store/demoStore";
 
 const UploadReceipt = () => {
+  // const setReceiptData = useReceiptStore((state) => state.setReceiptData);
+
+  const setFormData = useFormStore((state) => state.setFormData)
+  const setImage = useFormStore((state) => state.setImage)
+
   const navigate = useNavigate();
 
   const [file, setFile] = useState(null);
@@ -26,28 +33,30 @@ const UploadReceipt = () => {
       toast.warning("Please select a file");
     }
 
-    const text = await scanReceipt(file);
+    setImage(preview);
+    const result = await scanReceipt(file);
 
-    const parsedData = parseReceipt(text);
-    console.log(parsedData);
+    const parsedData = parseReceipt(result);
+    
+    setFormData(parsedData)
 
+    navigate("/app/review-receipt");
 
-    navigate("/app/review-receipt", {
-      state: {
-        mode: "upload",
-        image: preview,
-        scannedData: parsedData,
-      },
-    });
   };
 
   return (
     <div className="p-6 bg-white rounded-xl max-w-xl mx-auto space-y-4">
       <h2 className="text-xl font-bold">Scan or Upload Receipt</h2>
 
-      <input type="file" accept="image/*" capture="environment" onChange={handleFileChange} className="border w-full p-2 rounded-xl" />
+      <input
+        type="file"
+        accept="image/*"
+        capture="environment"
+        onChange={handleFileChange}
+        className="border w-full p-2 rounded-xl"
+      />
 
-      {preview && <img src={preview} className="w-full border rounded" />}
+      {preview && <img src={preview} className="w-100 border rounded h-100 object-contain mx-auto" />}
 
       <button
         onClick={handleUpload}

@@ -1,3 +1,13 @@
+const normalizeAmount = (amount) => {
+  // 50,00 -> 50.00
+  if (/^\d+,\d{2}$/.test(amount)) {
+    return Number(amount.replace(",", "."));
+  }
+
+  // 1,25,000 -> 125000
+  return Number(amount.replace(/,/g, ""));
+};
+
 export const extractAmount = (text) => {
   const patterns = [
     /\bgrand\s+total\b\s*[:\-]?\s*[₹$€£]?\s*([\d,]+(?:\.\d+)?)/i,
@@ -6,15 +16,13 @@ export const extractAmount = (text) => {
     /\btotal\b\s*[:\-]?\s*[₹$€£]?\s*([\d,]+(?:\.\d+)?)/i,
   ];
 
+  for (const pattern of patterns) {
+    const macthedAmount = text.match(pattern);
 
-  for(const pattern of patterns){
-
-      const macthedAmount = text.match(pattern);
-  
-      if(macthedAmount){
-        return macthedAmount[1].replace(/,/g, "");
-      }
+    if (macthedAmount) {
+      return normalizeAmount(macthedAmount[1]);
     }
+  }
 
-  return  "Amount not found";
+  return null;
 };

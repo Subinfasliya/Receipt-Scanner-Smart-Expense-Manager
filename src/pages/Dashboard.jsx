@@ -4,64 +4,76 @@ import { RiPieChart2Line, RiUploadCloudLine } from "react-icons/ri";
 import { TfiReceipt } from "react-icons/tfi";
 import AIInsights from "../components/dashboard/AIInsights";
 import { useNavigate } from "react-router";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect, useMemo } from "react";
 import ActionCard from "../components/dashboard/ActionCard";
+import { useExpenseStore, useFormStore } from "../store/demoStore";
+import { calculateTotalExpenses } from "../utils/calculateTotalExpenses";
+import { useAuth } from "../context/AuthContext";
 
 const ExpenseTrendChart = lazy(
   () => import("../components/dashboard/ExpenseTrendChart"),
 );
 
-// Summary Cards
-const summaryCards = [
-  {
-    icon: <LuWallet size={30} />,
-    title: "Total Expense",
-    total: "₹1,25,000",
-    description: "↑ 18.5% vs last month",
-    iconBg: "bg-[#EDE9FE]",
-    iconColor: "text-[#7C3AED]",
-  },
-  {
-    icon: <LuCalendarDays size={30} />,
-    title: "This Month Expense",
-    total: "₹15,520",
-    description: "↑ 12.8% vs last month",
-    iconBg: "bg-[#DCFCE7]",
-    iconColor: "text-[#22C55E]",
-  },
-  {
-    icon: <TfiReceipt size={30} />,
-    title: "Total Scanned Receipts",
-    total: 25,
-    description: "This month",
-    iconBg: "bg-[#FFEDD5]",
-    iconColor: "text-[#F97316]",
-  },
-  {
-    icon: <RiPieChart2Line size={30} />,
-    title: "Top Category",
-    total: "Food",
-    description: "₹6,400 (41%)",
-    iconBg: "bg-[#DBEAFE]",
-    iconColor: "text-[#2563EB]",
-  },
-];
-
 //
 
 const Dashboard = () => {
+  const { user } = useAuth();
   const navigate = useNavigate();
 
-  const handleCameraOpen = () => {
-    console.log("Camera is Opend");
-    navigate("/app/camera");
-  };
+  const getUserExpenses = useExpenseStore((state) => state.getUserExpenses);
+  // const getUserExpenses = useExpenseStore.getState().getUserExpenses(user.id);
+
+  console.log("User Exp : ", getUserExpenses);
+
+  const userExpenses =  getUserExpenses(user.id);
+
+
+  const totalExpenses = calculateTotalExpenses(userExpenses);
+  
+
+
   const handleReceiptUpload = () => {
     navigate("/app/upload-receipt");
   };
   const handleManualReceipt = () => {
-    console.log("Manual entry  is Opend");
+    navigate("/app/review-receipt");
   };
+
+  // Summary Cards
+  const summaryCards = [
+    {
+      icon: <LuWallet size={30} />,
+      title: "Total Expense",
+      total: `${totalExpenses}`,
+      description: "↑ 18.5% vs last month",
+      iconBg: "bg-[#EDE9FE]",
+      iconColor: "text-[#7C3AED]",
+    },
+    {
+      icon: <LuCalendarDays size={30} />,
+      title: "This Month Expense",
+      total: "₹15,520",
+      description: "↑ 12.8% vs last month",
+      iconBg: "bg-[#DCFCE7]",
+      iconColor: "text-[#22C55E]",
+    },
+    {
+      icon: <TfiReceipt size={30} />,
+      title: "Total Scanned Receipts",
+      total: 25,
+      description: "This month",
+      iconBg: "bg-[#FFEDD5]",
+      iconColor: "text-[#F97316]",
+    },
+    {
+      icon: <RiPieChart2Line size={30} />,
+      title: "Top Category",
+      total: "Food",
+      description: "₹6,400 (41%)",
+      iconBg: "bg-[#DBEAFE]",
+      iconColor: "text-[#2563EB]",
+    },
+  ];
 
   // Action cards
   const actionCards = [

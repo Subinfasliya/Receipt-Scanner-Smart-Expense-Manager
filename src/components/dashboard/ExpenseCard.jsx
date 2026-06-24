@@ -1,6 +1,9 @@
 import { LuWallet } from "react-icons/lu";
 
 const ExpenseCard = ({title,total,description,icon,iconBg,iconColor}) => {
+
+  console.log(total);
+  
   return (
     <>
       <div className="bg-white rounded-2xl p-4 shadow-sm mb-5">
