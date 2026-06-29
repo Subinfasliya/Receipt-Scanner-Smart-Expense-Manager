@@ -10,7 +10,6 @@ import MainLayout from "../components/layout/mainLayout/MainLayout";
 import AuthLayout from "../components/layout/authLayout/AuthLayout";
 import ProtectedRoute from "../routes/ProtectedRoute";
 import PublicRoute from "../routes/PublicRoute";
-import CameraOCR from "../pages/CameraOCR";
 import UploadReceipt from "../pages/UploadReceipt";
 import ForgotPassword from "../pages/authPages/ForgotPassword";
 
@@ -57,14 +56,6 @@ export const router = createBrowserRouter([
             handle: {
               title: "Expenses",
               subtitle: "Manage and track all your expenses",
-            },
-          },
-          {
-            path: "camera",
-            Component: CameraOCR,
-            handle: {
-              title: "Scan Receipt",
-              subtitle: "Capture your receipt using your camera",
             },
           },
           {

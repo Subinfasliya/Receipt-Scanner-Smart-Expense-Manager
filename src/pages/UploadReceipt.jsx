@@ -3,11 +3,9 @@ import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import { scanReceipt } from "../services/ocrService";
 import { parseReceipt } from "../services/parserService";
-import { useReceiptStore } from "../store/receiptStore";
 import { useFormStore } from "../store/demoStore";
 
 const UploadReceipt = () => {
-  // const setReceiptData = useReceiptStore((state) => state.setReceiptData);
 
   const setFormData = useFormStore((state) => state.setFormData)
   const setImage = useFormStore((state) => state.setImage)

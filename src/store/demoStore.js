@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { loadExpenses, saveExpenses } from "../storage/storage";
 
 // Add Expense Form Store
 
@@ -7,7 +8,7 @@ export const useFormStore = create((set) => ({
   formData: {
     date: "",
     time: "",
-    storeName: "",
+    merchant: "",
     category: "",
     amount: "",
     note: "",
@@ -36,7 +37,7 @@ export const useFormStore = create((set) => ({
       formData: {
         date: "",
         time: "",
-        storeName: "",
+        merchant: "",
         category: "",
         amount: "",
         note: "",
@@ -46,29 +47,54 @@ export const useFormStore = create((set) => ({
 
 // Expense Store
 
-const savedExpenses = JSON.parse(localStorage.getItem("expenses") || "[]");
-
 export const useExpenseStore = create((set, get) => ({
-  expenses: Array.isArray(savedExpenses) ? savedExpenses : [],
+  expenses: loadExpenses(),
 
-  addExpense: (expense) =>
-    set((state) => {
-      const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  // Create
 
-      const newExpense = {
-        ...expense,
-        userId: currentUser.id,
-      };
+  addExpense: (expense) => {
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
-      const updatedExpenses = [...state.expenses, newExpense];
+    const newExpense = {
+      ...expense,
+      id: crypto.randomUUID(),
+      userId: currentUser.id,
+    };
 
-      localStorage.setItem("expenses", JSON.stringify(updatedExpenses));
+    const updatedExpenses = [...get().expenses, newExpense];
 
-      return { expenses: updatedExpenses };
-    }),
+    saveExpenses(updatedExpenses);
 
-  getUserExpenses: (userId) => {
-    const allExpenses = get().expenses;
-    return allExpenses.filter((expense) => expense.userId === userId);
+    set({ expenses: updatedExpenses });
+  },
+
+  // Read
+
+  getExpenseById: (id) => {
+    return get().expenses.filter((expense) => expense.id === id);
+  },
+
+  // Update
+
+  updateExpense: (id, updatedData) => {
+    const updatedExpenses = get().expenses.map((expense) =>
+      expense.id === id ? { ...expense, ...updatedData } : expense,
+    );
+
+    saveExpenses(updatedExpenses);
+
+    set({expenses:updatedExpenses})
+  },
+
+  // Delete
+
+  deleteExpense: (expenseId) => {
+    const updatedExpenses = get().expenses.filter(
+      (expense) => expense.id !== expenseId,
+    );
+
+    saveExpenses(updatedExpenses);
+
+    set({ expenses: updatedExpenses });
   },
 }));

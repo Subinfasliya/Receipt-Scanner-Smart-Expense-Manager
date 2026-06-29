@@ -1,6 +1,4 @@
-const InputField = ({ label,name, type, value, onChange }) => {
-  
-
+const InputField = ({ label, name, type, value, onChange }) => {
   return (
     <>
       <div className="mb-4 ">
@@ -12,7 +10,7 @@ const InputField = ({ label,name, type, value, onChange }) => {
             type={type}
             id={name}
             name={name}
-            className="w-full border rounded-lg p-3"
+            className="w-full border border-gray-300 rounded-lg shadow-sm px-4 p-3 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
             value={value}
             onChange={onChange}
           />

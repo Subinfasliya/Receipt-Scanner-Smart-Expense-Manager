@@ -69,7 +69,8 @@ const Dropdown = ({
             border-gray-200
             rounded-lg
             shadow-lg
-            overflow-hidden
+            overflow-y-auto
+            max-h-50
           "
           >
             {options.map((option) => (

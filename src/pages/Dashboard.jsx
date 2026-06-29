@@ -18,18 +18,17 @@ const ExpenseTrendChart = lazy(
 
 const Dashboard = () => {
   const { user } = useAuth();
+  const allExpenses = useExpenseStore((state) => state.expenses);
   const navigate = useNavigate();
 
-  const getUserExpenses = useExpenseStore((state) => state.getUserExpenses);
-  // const getUserExpenses = useExpenseStore.getState().getUserExpenses(user.id);
-
-  console.log("User Exp : ", getUserExpenses);
-
-  const userExpenses =  getUserExpenses(user.id);
-
-
-  const totalExpenses = calculateTotalExpenses(userExpenses);
-  
+  // Get Current user total Expense
+  const totalExpenses = useMemo(() => {
+        
+    const userExpense = allExpenses.filter(
+      (expense) => expense.userId === user.id,
+    );
+   return  calculateTotalExpenses(userExpense)
+  }, [allExpenses,user.id]);
 
 
   const handleReceiptUpload = () => {

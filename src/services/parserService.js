@@ -9,7 +9,7 @@ export const parseReceipt = (text) => {
 
    
   return {
-    storeName: extractStore(text) || "",
+    merchant: extractStore(text) || "",
     date: extractDate(text) || "",
     time: extractTime(text) || "",
     amount: extractAmount(text) || "",

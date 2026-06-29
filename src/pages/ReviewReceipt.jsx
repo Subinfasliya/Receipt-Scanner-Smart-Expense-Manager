@@ -174,6 +174,15 @@ import { useExpenseStore, useFormStore } from "../store/demoStore";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
 import InputField from "../components/common/InputField";
+import Dropdown from "../components/common/Dropdown";
+
+const categoryOptions = [
+  { value: "medicines", label: "Medicines" },
+  { value: "food", label: "Food" },
+  { value: "grocery", label: "Grocery" },
+  { value: "personalCare", label: "Personal Care" },
+  { value: "others", label: "Others" },
+];
 
 const ReviewReceipt = () => {
   const formData = useFormStore((state) => state.formData);
@@ -191,7 +200,7 @@ const ReviewReceipt = () => {
     addExpense(formData);
     toast.success("Successfully Added new Expenses");
     resetForm();
-    navigate("/app/expenses")
+    navigate("/app/expenses");
   };
 
   const handleCancel = () => {
@@ -203,7 +212,9 @@ const ReviewReceipt = () => {
     <>
       <div className="p-6 ">
         <div className="bg-white rounded-xl p-5">
-          <div className={` grid gap-6 ${hasImage ? "grid-cols-1 xl:grid-cols-2" : "grid-cols-1"} `}>
+          <div
+            className={` grid gap-6 ${hasImage ? "grid-cols-1 xl:grid-cols-2" : "grid-cols-1"} `}
+          >
             {hasImage && (
               <div className="border rounded-xl overflow-hidden p-4">
                 <h3 className="font-semibold mb-4 text-md">Receipt Preview</h3>
@@ -219,9 +230,11 @@ const ReviewReceipt = () => {
             )}
 
             <div
-              className={`p-4 ${!hasImage ? "max-w-5xl mx-auto w-[650px] border rounded-xl p-6" : ""}`}
+              className={`p-4 ${!hasImage ? "max-w-5xl mx-auto w-[650px] border border-[#7C3AED] rounded-xl p-6" : ""}`}
             >
-              <h3 className={`${hasImage ? "font-semibold mb-4 text-lg" : "text-xl my-4 text-center font-semibold"}`}>
+              <h3
+                className={`${hasImage ? "font-semibold mb-4 text-lg" : "text-xl my-4 text-center font-semibold"}`}
+              >
                 {hasImage ? "Extracted Details" : "Add Expense"}
               </h3>
               <div className="gap-4">
@@ -244,40 +257,22 @@ const ReviewReceipt = () => {
                   />
 
                   <InputField
-                    label="Store Name"
-                    id="storeName"
-                    name="storeName"
-                    value={formData.storeName}
-                    onChange={(e) => setField("storeName", e.target.value)}
+                    label="Merchant Name"
+                    id="merchant"
+                    name="merchant"
+                    value={formData.merchant}
+                    onChange={(e) => setField("merchant", e.target.value)}
                   />
 
                   <div className=" mb-5">
-                    <label
-                      htmlFor="category"
-                      className="text-sm font-medium block mb-2"
-                    >
+                    <label className="text-sm font-medium block mb-2">
                       Category
                     </label>
-                    <div className="relative">
-                      <select
-                        type="category"
-                        id="categories"
-                        name="category"
-                        // className="w-full px-4 py-3 border rounded-lg p-3"
-                        className="w-full px-4 py-3 rounded-lg border  text-gray-800 shadow-sm focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
-                        value={formData.category}
-                        onChange={(e) => setField("category", e.target.value)}
-                      >
-                        <div className="absolute top-full left-0 mt-2 w-full bg-white border rounded-lg shadow-lg z-10">
-                          <option value={""}>Select Categories</option>
-                          <option value="medicines">Medicines</option>
-                          <option value="grocery">Grocery</option>
-                          <option value="food">Food</option>
-                          <option value="personalCare">Personal Care</option>
-                          <option value="others">Others</option>
-                        </div>
-                      </select>
-                    </div>
+                    <Dropdown
+                      options={categoryOptions}
+                      value={formData.category}
+                      onChange={(value) => setField("category", value)}
+                    />
                   </div>
 
                   <InputField
@@ -298,7 +293,7 @@ const ReviewReceipt = () => {
                     <textarea
                       name="notes"
                       rows={3}
-                      className="w-full border rounded-lg p-3"
+                      className="w-full border border-gray-300 rounded-lg shadow-sm px-4 p-3 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                       placeholder="Add a note..."
                       value={formData.note}
                       onChange={(e) => setField("note", e.target.value)}
@@ -323,8 +318,6 @@ const ReviewReceipt = () => {
                 </form>
               </div>
             </div>
-
-        
           </div>
         </div>
       </div>
